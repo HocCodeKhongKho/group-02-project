@@ -6,7 +6,7 @@ services:
     region: singapore
     repo: https://github.com/HocCodeKhongKho/group-02-project
     rootDir: backend
-    buildCommand: uv sync
+    buildCommand: pip install uv && uv sync
     startCommand: uv run uvicorn src.backend.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: DATABASE_URL
