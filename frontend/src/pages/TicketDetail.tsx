@@ -212,8 +212,8 @@ const TicketDetail: React.FC = () => {
                 <p className="text-slate-500 mb-2">Ảnh đính kèm ({ticket.attachment_urls.length}):</p>
                 <div className="flex flex-wrap gap-2">
                   {ticket.attachment_urls.map((url, idx) => (
-                    <a key={idx} href={`http://localhost:8000${url}`} target="_blank" rel="noopener noreferrer" className="block cursor-zoom-in">
-                      <img src={`http://localhost:8000${url}`} alt={`Attachment ${idx}`} className="rounded-lg border border-slate-200 h-24 w-24 object-cover shadow-sm hover:ring-2 hover:ring-indigo-400 transition-all" />
+                    <a key={idx} href={`https://ai-helpdesk-backend-zq05.onrender.com${url}`} target="_blank" rel="noopener noreferrer" className="block cursor-zoom-in">
+                      <img src={`https://ai-helpdesk-backend-zq05.onrender.com${url}`} alt={`Attachment ${idx}`} className="rounded-lg border border-slate-200 h-24 w-24 object-cover shadow-sm hover:ring-2 hover:ring-indigo-400 transition-all" />
                     </a>
                   ))}
                 </div>
