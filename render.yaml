@@ -2,8 +2,9 @@ services:
   - type: web
     name: ai-helpdesk-backend
     env: python
+    plan: free
     region: singapore
-    repo: https://github.com/ThucLinh3110/Nhom-2-AI-Helpdesk-IT-Ticket-Management
+    repo: https://github.com/HocCodeKhongKho/group-02-project
     rootDir: backend
     buildCommand: uv sync
     startCommand: uv run uvicorn src.backend.main:app --host 0.0.0.0 --port $PORT
