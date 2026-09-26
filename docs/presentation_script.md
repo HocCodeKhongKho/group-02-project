@@ -42,9 +42,9 @@
 
 **"Tiếp theo là Use Case 2: Tính năng Nhắn tin trao đổi (Chat) trên Ticket và sự hỗ trợ của Trợ lý AI."**
 
-### 1. Luồng hoạt động & Trợ lý AI (Live Flow)
-- *(Demo trên UI)* "Theo User Story, khi khách hàng hoặc IT Agent vào màn hình chi tiết vé, họ có thể chat qua lại để trao đổi thêm thông tin. Tin nhắn được hiển thị realtime lập tức kèm tên và thời gian."
-- **Trợ lý AI hỗ trợ:** *(Nhấn mạnh)* "Đặc biệt, em không để nhân viên IT phải gõ tay toàn bộ. Trong màn hình này có một nút **'Hỏi Trợ lý AI'** (hoặc AI Draft). AI sẽ tự động đọc ngữ cảnh toàn bộ Ticket và Knowledge Base nội bộ của công ty để **gợi ý (draft) câu trả lời hoàn chỉnh**. Nhân viên IT (con người) đóng vai trò kiểm duyệt, chỉ cần nhấn 'Gửi' nếu thấy hợp lý. Đây là cách AI phục vụ con người một cách an toàn."
+### 1. Luồng hoạt động & AI Auto-reply (Live Flow)
+- *(Demo trên UI)* "Theo User Story, khi khách hàng vào màn hình chi tiết vé, họ có thể gửi tin nhắn phản hồi. Điểm đột phá ở đây là thay vì bắt khách hàng đợi nhân viên IT online, hệ thống của em có tính năng **AI Auto-reply**."
+- **AI Tự động trả lời:** *(Nhấn mạnh)* "Ngay khi khách hàng nhắn tin, một Background Task ở Backend sẽ tự động được kích hoạt. AI lập tức quét toàn bộ Knowledge Base nội bộ và **tự động gửi lại một câu trả lời chính xác dưới tên 'AI Assistant'**. Khách hàng gần như nhận được hỗ trợ ngay lập tức (SLA = 0), trong khi nhân viên IT được giảm tải hoàn toàn công việc trả lời lặp đi lặp lại. Nếu câu hỏi nằm ngoài tài liệu, AI sẽ im lặng nhường quyền cho IT thật."
 
 ### 2. Các file cốt lõi (Bí mật nằm ở đâu)
 - *(Mở code)* "Tính năng Chat này được viết tại Frontend ở file `frontend/src/pages/TicketDetail.tsx`. Toàn bộ luồng mà Trợ lý AI sinh ra câu trả lời dựa trên ngữ cảnh nằm ở Backend trong file `backend/src/backend/services/ai_client.py`."

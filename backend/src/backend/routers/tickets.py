@@ -137,7 +137,7 @@ async def get_ticket_messages(ticket_id: int, db: AsyncSession = Depends(get_db)
     return result.scalars().all()
 
 @router.post("/{ticket_id}/messages", response_model=MessageResponse)
-async def add_message(ticket_id: int, message_data: MessageCreate, db: AsyncSession = Depends(get_db)):
+async def add_message(ticket_id: int, message_data: MessageCreate, background_tasks: BackgroundTasks, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Ticket).where(Ticket.id == ticket_id))
     ticket = result.scalars().first()
     if not ticket:
@@ -158,6 +158,11 @@ async def add_message(ticket_id: int, message_data: MessageCreate, db: AsyncSess
         
     await db.commit()
     await db.refresh(new_message)
+    
+    if message_data.role == MessageRole.CUSTOMER:
+        from ..services.ai_service import trigger_ai_auto_reply
+        background_tasks.add_task(trigger_ai_auto_reply, ticket_id, message_data.content)
+        
     return new_message
 
 @router.post("/{ticket_id}/resolve", response_model=TicketResponse)

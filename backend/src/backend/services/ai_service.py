@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from .ai_client import ai_triage_ticket
 from .sla_engine import calculate_sla_due_date
-from ..models import Ticket, TicketCategory, TicketPriority, Message, MessageRole
+from ..models import Ticket, TicketCategory, TicketPriority, Message, MessageRole, Article, TicketStatus
 from ..database import AsyncSessionLocal
 
 async def trigger_ai_triage(ticket_id: int):
@@ -76,3 +76,33 @@ async def generate_ai_draft(ticket_description: str, kb_articles: list) -> str:
     """
     response = await draft_model.generate_content_async(prompt)
     return response.text.strip()
+
+async def trigger_ai_auto_reply(ticket_id: int, message_content: str):
+    async with AsyncSessionLocal() as db:
+        kb_result = await db.execute(select(Article))
+        articles = kb_result.scalars().all()
+        
+        if not articles:
+            return
+            
+        try:
+            draft_text = await generate_ai_draft(message_content, articles)
+            
+            if draft_text and draft_text != "NO_MATCH":
+                auto_msg = Message(
+                    ticket_id=ticket_id,
+                    sender_id="ai_assistant",
+                    sender_name="AI Assistant",
+                    role=MessageRole.AGENT,
+                    content=draft_text
+                )
+                db.add(auto_msg)
+                
+                result = await db.execute(select(Ticket).where(Ticket.id == ticket_id))
+                ticket = result.scalars().first()
+                if ticket and ticket.status == TicketStatus.NEW:
+                    ticket.status = TicketStatus.IN_PROGRESS
+                    
+                await db.commit()
+        except Exception as e:
+            print(f"AI Auto-reply error: {e}")
